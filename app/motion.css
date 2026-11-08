@@ -1,0 +1,427 @@
+/* All interface motion. The reduced-motion rule in globals.css switches it off. */
+
+:root {
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  interpolate-size: allow-keywords;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* background instruments */
+
+.backdrop {
+  opacity: 1;
+}
+@media (max-width: 860px) {
+  .backdrop {
+    --art-opacity: 0.06;
+  }
+}
+.art {
+  opacity: var(--art-opacity);
+  transform: translate(calc(var(--px, 0) * var(--d) * 1px), calc(var(--py, 0) * var(--d) * 1px));
+  transition: transform 0.5s ease-out;
+}
+.float {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: float 9s ease-in-out infinite alternate;
+}
+@keyframes float {
+  from {
+    transform: translateY(-5px) rotate(-1.4deg);
+  }
+  to {
+    transform: translateY(6px) rotate(1.4deg);
+  }
+}
+.float.is-beat {
+  animation: beat 1.5s ease-in-out infinite;
+}
+@keyframes beat {
+  0%,
+  40%,
+  100% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.09);
+  }
+  26% {
+    transform: scale(1.04);
+  }
+}
+.ecg-sweep {
+  stroke-width: 2.6;
+  stroke-dasharray: 0.14 0.86;
+  opacity: calc(var(--art-opacity) * 4);
+  animation: sweep 7s linear infinite;
+}
+@keyframes sweep {
+  from {
+    stroke-dashoffset: 1.14;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* header */
+
+.logo-trace {
+  stroke-dasharray: 1;
+  animation: draw 1.3s var(--ease) both;
+}
+.dot.is-on {
+  position: relative;
+}
+.dot.is-on::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--strong);
+  animation: ping 2.4s ease-out infinite;
+}
+@keyframes ping {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* entrances */
+
+.intro h1 {
+  animation: rise 0.55s var(--ease) backwards;
+}
+.intro p {
+  animation: rise 0.55s 0.08s var(--ease) backwards;
+}
+.composer {
+  animation: rise 0.55s 0.16s var(--ease) backwards;
+}
+.prepare {
+  animation: fade 0.3s ease backwards;
+}
+.suggestions li {
+  animation: rise 0.4s calc(var(--i, 0) * 50ms + 0.24s) var(--ease) backwards;
+}
+.library {
+  animation: slide-right 0.45s var(--ease) backwards;
+}
+.rail {
+  animation: slide-left 0.4s var(--ease) backwards;
+}
+.turn {
+  animation: rise 0.35s var(--ease) backwards;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.turn.is-selected {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.turn .answer > * {
+  animation: rise 0.3s var(--ease) backwards;
+}
+.quick button {
+  animation: rise 0.35s var(--ease) backwards;
+}
+.quick button:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.quick button:nth-child(3) {
+  animation-delay: 0.08s;
+}
+.quick button:nth-child(4) {
+  animation-delay: 0.12s;
+}
+.quick button:nth-child(5) {
+  animation-delay: 0.16s;
+}
+
+/* buttons */
+
+.ask-btn,
+.quick button,
+.suggestions button,
+.reader-close,
+.cite {
+  transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.18s var(--ease);
+}
+.ask-btn:active:not(:disabled),
+.quick button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.text-btn {
+  transition: opacity 0.15s;
+}
+.ask-btn {
+  position: relative;
+}
+.ask-btn.is-busy {
+  color: transparent;
+}
+.ask-btn.is-busy::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid var(--on-accent);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (hover: hover) {
+  .ask-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+  .quick button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(16, 36, 47, 0.1);
+  }
+  .suggestions button:hover:not(:disabled) {
+    transform: translateX(4px);
+    color: var(--accent-strong);
+  }
+  .reader-close:hover {
+    transform: rotate(90deg);
+  }
+  .cite:hover {
+    transform: scale(1.15);
+  }
+  .turn:not(.is-selected):hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    box-shadow: 0 4px 14px rgba(16, 36, 47, 0.08);
+  }
+  .text-btn:hover {
+    opacity: 0.7;
+  }
+  .doc:hover {
+    background: var(--surface-2);
+  }
+}
+
+/* disease list */
+
+.doc {
+  animation: slide-right 0.3s calc(var(--i, 0) * 18ms) var(--ease) backwards;
+  transition: opacity 0.2s, background 0.15s;
+}
+.doc.is-off {
+  opacity: 0.5;
+}
+.doc-open {
+  transition: color 0.15s;
+}
+.bar span {
+  background-image: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shine 1.2s linear infinite;
+}
+.bar.is-busy span {
+  animation: busy 1.1s ease-in-out infinite alternate, shine 1.2s linear infinite;
+}
+@keyframes shine {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* composer */
+
+.composer-box {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.composer-box.is-ping {
+  animation: ping-box 0.5s ease;
+}
+@keyframes ping-box {
+  40% {
+    box-shadow: 0 0 0 5px var(--accent-soft);
+    transform: scale(1.006);
+  }
+}
+
+/* sliding selector */
+
+.segmented .seg-track {
+  position: relative;
+  display: inline-flex;
+  padding: 2px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.seg-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  transition: transform 0.28s var(--ease), width 0.28s var(--ease);
+}
+.segmented label span,
+.segmented label:first-of-type span,
+.segmented label:last-of-type span {
+  position: relative;
+  padding: 2px 11px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+.segmented input:checked + span {
+  background: transparent;
+  color: var(--on-accent);
+}
+
+/* search and writing states */
+
+.pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pulse-loader {
+  color: var(--accent);
+  flex: none;
+}
+.pulse-loader path {
+  stroke-dasharray: 0.45 0.55;
+  animation: pulse-run 1.15s linear infinite;
+}
+@keyframes pulse-run {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.skeleton {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+}
+.skeleton i {
+  display: block;
+  height: 11px;
+  border-radius: 4px;
+  background: linear-gradient(100deg, var(--line-2) 30%, var(--surface-2) 50%, var(--line-2) 70%);
+  background-size: 200% 100%;
+  animation: shine 1.3s linear infinite;
+}
+.skeleton i:nth-child(2) {
+  width: 86%;
+}
+.skeleton i:nth-child(3) {
+  width: 62%;
+}
+
+/* source passages */
+
+.verdict {
+  animation: fade 0.35s ease backwards;
+}
+.passage {
+  animation: slide-left 0.35s calc(var(--i, 0) * 70ms) var(--ease) backwards;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.passage.is-active {
+  animation: flash 0.7s ease;
+}
+@keyframes flash {
+  30% {
+    box-shadow: inset 0 0 0 2.5px var(--accent), 0 0 0 5px var(--accent-soft);
+  }
+}
+.meter-fill {
+  transform-origin: left;
+  animation: grow 0.6s calc(var(--i, 0) * 70ms + 0.1s) var(--ease) backwards;
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* folding sections, in browsers that can animate them */
+
+details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: block-size 0.28s var(--ease), content-visibility 0.28s allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
+}
+
+/* reference reader */
+
+.reader-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  visibility: hidden;
+  transition: visibility 0.3s;
+}
+.reader-wrap.is-on {
+  visibility: visible;
+}
+.reader-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 26, 34, 0.42);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.reader-wrap.is-on .reader-scrim {
+  opacity: 1;
+}
+.reader {
+  transform: translateX(100%);
+  transition: transform 0.32s var(--ease);
+}
+.reader-wrap.is-on .reader {
+  transform: none;
+}
